@@ -1,25 +1,52 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import {
+  Box,
+  Center,
+  ChakraProvider,
+  Heading,
+  useBreakpointValue,
+} from "@chakra-ui/react";
 
-function App() {
+import Sidebar from "./components/Sidebar";
+import Navbar from "./components/navbar";
+import theme from "./theme";
+
+const smVariant = { navigation: "drawer", navigationButton: true };
+const mdVariant = { navigation: "sidebar", navigationButton: false };
+
+export default function App() {
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const variants = { navigation: "drawer", navigationButton: true };
+
+  const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <ChakraProvider theme={theme}>
+        <Sidebar
+          variant={variants?.navigation}
+          isOpen={isSidebarOpen}
+          onClose={toggleSidebar}
+        />
+        <Box ml={!variants?.navigationButton && 200}>
+          <Navbar
+            showSidebarButton={variants?.navigationButton}
+            onShowSidebar={toggleSidebar}
+          />
+        </Box>
+
+        <Box my={5}>
+          <Center>
+            <Heading variant="h2">Home Page</Heading>
+          </Center>
+          <Center>
+            <Heading variant="h2">About Page</Heading>
+          </Center>
+          <Center>
+            <Heading variant="h2">Contact Page</Heading>
+          </Center>
+        </Box>
+      </ChakraProvider>
+    </>
   );
 }
-
-export default App;
